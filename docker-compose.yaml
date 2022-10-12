@@ -1,0 +1,27 @@
+version: '3.9'
+services: 
+  mongodb:
+    container_name: mongodb
+    image: mongo
+    hostname: host-bank
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: hrevilla
+      MONGO_INITDB_ROOT_PASSWORD: 1234
+    volumes:
+      - data-mongodb:/var/lib/customerdb
+      - logs-mongodb:/var/log/customerdb/
+    networks:
+      - bank
+
+volumes:
+  data-mongodb:
+    name: data-bank
+  logs-mongodb:
+    name: logs-bank
+
+networks:
+  bank:
+    name: bank
