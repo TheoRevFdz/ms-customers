@@ -1,4 +1,4 @@
-package com.nttdata.bootcamp.mscustomers.application;
+package com.nttdata.bootcamp.mscustomers.interfaces;
 
 import com.nttdata.bootcamp.mscustomers.model.Customer;
 
