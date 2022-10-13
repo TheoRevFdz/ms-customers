@@ -9,4 +9,8 @@ public interface ICustomerService {
     public Mono<Customer> createCustomer(Mono<Customer> customer);
 
     public Flux<Customer> findAllCustomers();
+
+    public Mono<Customer> updateCustomer(Customer customer);
+
+    public boolean deleteCustomer(String id);
 }
