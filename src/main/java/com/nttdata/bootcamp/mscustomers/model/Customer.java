@@ -1,5 +1,7 @@
 package com.nttdata.bootcamp.mscustomers.model;
 
+import java.util.Date;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -18,6 +20,11 @@ public class Customer {
     private String id;
     private String firstName;
     private String lastName;
+    private String typeDoc;
     private String nroDoc;
-    private String type;
+    private String phone;
+    private String email;
+    private String typePerson;
+    private String typeProduct;
+    private Date regDate;
 }

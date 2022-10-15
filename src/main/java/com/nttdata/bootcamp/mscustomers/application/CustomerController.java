@@ -24,13 +24,13 @@ import reactor.core.publisher.Mono;
 @RequestMapping("customers")
 public class CustomerController {
     @Autowired
-    ICustomerService service;
+    private ICustomerService service;
 
     @PostMapping
     public ResponseEntity<?> createCustomer(@RequestBody Customer customer) {
         try {
-            if (customer != null && (customer.getType().equals(CustomerTypes.PERSONAL.toString())
-                    || customer.getType().equals(CustomerTypes.EMPRESARIAL.toString()))) {
+            if (customer != null && (customer.getTypePerson().equals(CustomerTypes.PERSONAL.toString())
+                    || customer.getTypePerson().equals(CustomerTypes.EMPRESARIAL.toString()))) {
                 final Mono<Customer> customerMono = Mono.just(customer);
                 final Mono<Customer> response = service.createCustomer(customerMono);
                 return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -62,8 +62,8 @@ public class CustomerController {
     @PutMapping
     public ResponseEntity<?> updateCustomer(@RequestBody Customer customer) {
         try {
-            if (customer != null && (customer.getType().equals(CustomerTypes.PERSONAL.toString())
-                    || customer.getType().equals(CustomerTypes.EMPRESARIAL.toString()))) {
+            if (customer != null && (customer.getTypePerson().equals(CustomerTypes.PERSONAL.toString())
+                    || customer.getTypePerson().equals(CustomerTypes.EMPRESARIAL.toString()))) {
                 Mono<Customer> response = service.updateCustomer(customer);
                 if (response != null) {
                     return ResponseEntity.ok(response);
