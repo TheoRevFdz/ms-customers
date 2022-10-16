@@ -3,6 +3,8 @@ package com.nttdata.bootcamp.mscustomers.application;
 import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,20 +19,27 @@ import com.nttdata.bootcamp.mscustomers.enums.CustomerTypes;
 import com.nttdata.bootcamp.mscustomers.interfaces.ICustomerService;
 import com.nttdata.bootcamp.mscustomers.model.Customer;
 
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+@Slf4j
+@RefreshScope
 @RestController
 @RequestMapping("customers")
 public class CustomerController {
     @Autowired
     private ICustomerService service;
 
+    @Value("message.demo")
+    private String demoString;
+
     @PostMapping
     public ResponseEntity<?> createCustomer(@RequestBody Customer customer) {
         try {
-            if (customer != null && (customer.getTypePerson().equals(CustomerTypes.PERSONAL.toString())
-                    || customer.getTypePerson().equals(CustomerTypes.EMPRESARIAL.toString()))) {
+            if (customer != null && customer.getTypePerson() != null
+                    && (customer.getTypePerson().equals(CustomerTypes.PERSONAL.toString())
+                            || customer.getTypePerson().equals(CustomerTypes.EMPRESARIAL.toString()))) {
                 final Mono<Customer> customerMono = Mono.just(customer);
                 final Mono<Customer> response = service.createCustomer(customerMono);
                 return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -51,6 +60,7 @@ public class CustomerController {
     @GetMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public ResponseEntity<?> findAllCustomers() {
         try {
+            log.info(demoString);
             final Flux<Customer> response = service.findAllCustomers();
             return ResponseEntity.ok(response);
         } catch (Exception e) {
