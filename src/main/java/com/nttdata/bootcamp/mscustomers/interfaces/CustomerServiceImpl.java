@@ -36,11 +36,16 @@ public class CustomerServiceImpl implements ICustomerService {
     @Override
     public boolean deleteCustomer(String id) {
         Mono<Customer> cusFinded = repository.findById(id);
-        if (cusFinded != null) {
+        if (cusFinded.block() != null) {
             repository.deleteById(id);
             return true;
         }
         return false;
+    }
+
+    @Override
+    public Mono<Customer> findCustomerByNroDoc(String nroDoc) {
+        return repository.findByNroDoc(nroDoc);
     }
 
 }

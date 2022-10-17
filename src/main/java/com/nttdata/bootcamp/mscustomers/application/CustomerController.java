@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -93,6 +94,18 @@ public class CustomerController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Collections.singletonMap("message", "Error en servidor al actualizar cliente."));
+        }
+    }
+
+    @GetMapping("/byNroDoc/{nroDoc}")
+    public ResponseEntity<?> findCustomerByNroDoc(@PathVariable String nroDoc) {
+        try {
+            final Mono<Customer> response = service.findCustomerByNroDoc(nroDoc);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.singletonMap("message",
+                            "Error en servidor al obetener cliente por número de documento."));
         }
     }
 }
