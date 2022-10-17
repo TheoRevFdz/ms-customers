@@ -10,7 +10,7 @@ public interface ICustomerService {
 
     public Flux<Customer> findAllCustomers();
 
-    public Mono<Customer> findCustomerByNroDoc(String nroDoc);
+    public Customer findCustomerByNroDoc(String nroDoc);
 
     public Mono<Customer> updateCustomer(Customer customer);
 

@@ -1,6 +1,8 @@
 package com.nttdata.bootcamp.mscustomers.application;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nttdata.bootcamp.mscustomers.enums.CustomerTypes;
@@ -27,7 +28,6 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @RefreshScope
 @RestController
-@RequestMapping("customers")
 public class CustomerController {
     @Autowired
     private ICustomerService service;
@@ -35,7 +35,9 @@ public class CustomerController {
     @Value("message.demo")
     private String demoString;
 
-    @PostMapping
+    private final String endPoint = "customers";
+
+    @PostMapping(endPoint)
     public ResponseEntity<?> createCustomer(@RequestBody Customer customer) {
         try {
             if (customer != null && customer.getTypePerson() != null
@@ -58,7 +60,7 @@ public class CustomerController {
         }
     }
 
-    @GetMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @GetMapping(value = endPoint, produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public ResponseEntity<?> findAllCustomers() {
         try {
             log.info(demoString);
@@ -70,7 +72,7 @@ public class CustomerController {
         }
     }
 
-    @PutMapping
+    @PutMapping(endPoint)
     public ResponseEntity<?> updateCustomer(@RequestBody Customer customer) {
         try {
             if (customer != null && (customer.getTypePerson().equals(CustomerTypes.PERSONAL.toString())
@@ -97,15 +99,27 @@ public class CustomerController {
         }
     }
 
-    @GetMapping("/byNroDoc/{nroDoc}")
+    @GetMapping(endPoint + "/byNroDoc/{nroDoc}")
     public ResponseEntity<?> findCustomerByNroDoc(@PathVariable String nroDoc) {
         try {
-            final Mono<Customer> response = service.findCustomerByNroDoc(nroDoc);
-            return ResponseEntity.ok(response);
+            final Customer response = service.findCustomerByNroDoc(nroDoc);
+            if (response != null) {
+                Map<String,Object> res=new HashMap<>();
+                res.put("id", response.getId());
+                res.put("firstName",response.getFirstName());
+                res.put("lastName",response.getLastName());
+                res.put("typeDoc",response.getTypeDoc());
+                res.put("nroDoc",response.getNroDoc());
+                res.put("phone",response.getPhone());
+                res.put("email",response.getEmail());
+                res.put("typePerson",response.getTypePerson());
+                res.put("typeProduct",response.getTypeProduct());
+                res.put("regDate",response.getRegDate());
+                return ResponseEntity.ok(res);
+            }
+            return ResponseEntity.notFound().build();
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Collections.singletonMap("message",
-                            "Error en servidor al obetener cliente por número de documento."));
+            return ResponseEntity.notFound().build();
         }
     }
 }
