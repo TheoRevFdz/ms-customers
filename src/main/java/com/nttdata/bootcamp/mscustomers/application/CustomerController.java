@@ -1,8 +1,6 @@
 package com.nttdata.bootcamp.mscustomers.application;
 
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -104,18 +102,18 @@ public class CustomerController {
         try {
             final Customer response = service.findCustomerByNroDoc(nroDoc);
             if (response != null) {
-                Map<String,Object> res=new HashMap<>();
-                res.put("id", response.getId());
-                res.put("firstName",response.getFirstName());
-                res.put("lastName",response.getLastName());
-                res.put("typeDoc",response.getTypeDoc());
-                res.put("nroDoc",response.getNroDoc());
-                res.put("phone",response.getPhone());
-                res.put("email",response.getEmail());
-                res.put("typePerson",response.getTypePerson());
-                res.put("typeProduct",response.getTypeProduct());
-                res.put("regDate",response.getRegDate());
-                return ResponseEntity.ok(res);
+                // Map<String,Object> res=new HashMap<>();
+                // res.put("id", response.getId());
+                // res.put("firstName",response.getFirstName());
+                // res.put("lastName",response.getLastName());
+                // res.put("typeDoc",response.getTypeDoc());
+                // res.put("nroDoc",response.getNroDoc());
+                // res.put("phone",response.getPhone());
+                // res.put("email",response.getEmail());
+                // res.put("typePerson",response.getTypePerson());
+                // res.put("typeProduct",response.getTypeProduct());
+                // res.put("regDate",response.getRegDate());
+                return ResponseEntity.ok(response);
             }
             return ResponseEntity.notFound().build();
         } catch (Exception e) {
