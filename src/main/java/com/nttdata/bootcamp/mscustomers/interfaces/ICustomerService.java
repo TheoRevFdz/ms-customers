@@ -1,5 +1,7 @@
 package com.nttdata.bootcamp.mscustomers.interfaces;
 
+import java.util.Optional;
+
 import com.nttdata.bootcamp.mscustomers.model.Customer;
 
 import reactor.core.publisher.Flux;
@@ -10,7 +12,7 @@ public interface ICustomerService {
 
     public Flux<Customer> findAllCustomers();
 
-    public Customer findCustomerByNroDoc(String nroDoc);
+    public Optional<Customer> findCustomerByNroDoc(String nroDoc);
 
     public Mono<Customer> updateCustomer(Customer customer);
 

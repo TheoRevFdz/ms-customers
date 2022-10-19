@@ -1,6 +1,7 @@
 package com.nttdata.bootcamp.mscustomers.application;
 
 import java.util.Collections;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,9 +34,7 @@ public class CustomerController {
     @Value("message.demo")
     private String demoString;
 
-    private final String endPoint = "customers";
-
-    @PostMapping(endPoint)
+    @PostMapping
     public ResponseEntity<?> createCustomer(@RequestBody Customer customer) {
         try {
             if (customer != null && customer.getTypePerson() != null
@@ -58,7 +57,7 @@ public class CustomerController {
         }
     }
 
-    @GetMapping(value = endPoint, produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @GetMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public ResponseEntity<?> findAllCustomers() {
         try {
             log.info(demoString);
@@ -70,7 +69,7 @@ public class CustomerController {
         }
     }
 
-    @PutMapping(endPoint)
+    @PutMapping
     public ResponseEntity<?> updateCustomer(@RequestBody Customer customer) {
         try {
             if (customer != null && (customer.getTypePerson().equals(CustomerTypes.PERSONAL.toString())
@@ -97,22 +96,11 @@ public class CustomerController {
         }
     }
 
-    @GetMapping(endPoint + "/byNroDoc/{nroDoc}")
+    @GetMapping("/byNroDoc/{nroDoc}")
     public ResponseEntity<?> findCustomerByNroDoc(@PathVariable String nroDoc) {
         try {
-            final Customer response = service.findCustomerByNroDoc(nroDoc);
-            if (response != null) {
-                // Map<String,Object> res=new HashMap<>();
-                // res.put("id", response.getId());
-                // res.put("firstName",response.getFirstName());
-                // res.put("lastName",response.getLastName());
-                // res.put("typeDoc",response.getTypeDoc());
-                // res.put("nroDoc",response.getNroDoc());
-                // res.put("phone",response.getPhone());
-                // res.put("email",response.getEmail());
-                // res.put("typePerson",response.getTypePerson());
-                // res.put("typeProduct",response.getTypeProduct());
-                // res.put("regDate",response.getRegDate());
+            final Optional<Customer> response = service.findCustomerByNroDoc(nroDoc);
+            if (response.isPresent()) {
                 return ResponseEntity.ok(response);
             }
             return ResponseEntity.notFound().build();

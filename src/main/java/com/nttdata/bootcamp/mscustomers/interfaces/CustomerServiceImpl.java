@@ -1,6 +1,7 @@
 package com.nttdata.bootcamp.mscustomers.interfaces;
 
 import java.time.Duration;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -51,7 +52,7 @@ public class CustomerServiceImpl implements ICustomerService {
     }
 
     @Override
-    public Customer findCustomerByNroDoc(String nroDoc) {
+    public Optional<Customer> findCustomerByNroDoc(String nroDoc) {
         return repository.findByNroDoc(nroDoc);
     }
 
