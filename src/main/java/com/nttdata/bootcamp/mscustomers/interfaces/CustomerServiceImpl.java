@@ -56,4 +56,9 @@ public class CustomerServiceImpl implements ICustomerService {
         return repository.findByNroDoc(nroDoc);
     }
 
+    @Override
+    public Mono<Customer> findCustomerById(String id) {
+        return reactiveRepository.findById(id);
+    }
+
 }

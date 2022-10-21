@@ -108,4 +108,14 @@ public class CustomerController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findCustomerById(@PathVariable String id) {
+        try {
+            final Mono<Customer> response = service.findCustomerById(id);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
 }

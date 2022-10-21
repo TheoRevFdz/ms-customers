@@ -17,4 +17,6 @@ public interface ICustomerService {
     public Mono<Customer> updateCustomer(Customer customer);
 
     public boolean deleteCustomer(String id);
+
+    public Mono<Customer> findCustomerById(String id);
 }
