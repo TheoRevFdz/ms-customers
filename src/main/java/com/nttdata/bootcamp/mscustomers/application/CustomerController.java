@@ -1,6 +1,7 @@
 package com.nttdata.bootcamp.mscustomers.application;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,12 @@ public class CustomerController {
             if (customer != null && customer.getTypePerson() != null
                     && (customer.getTypePerson().equals(CustomerTypes.PERSONAL.toString())
                             || customer.getTypePerson().equals(CustomerTypes.EMPRESARIAL.toString()))) {
+
+                if (customer.getProfile() == null || customer.getProfile().isBlank()) {
+                    customer.setProfile("GENERAL");
+                }else{
+                    // if(customer.getTypePerson().equals(CustomerTypes.PERSONAL.toString() &&)
+                }
                 final Mono<Customer> customerMono = Mono.just(customer);
                 final Mono<Customer> response = service.createCustomer(customerMono);
                 return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -74,6 +81,7 @@ public class CustomerController {
         try {
             if (customer != null && (customer.getTypePerson().equals(CustomerTypes.PERSONAL.toString())
                     || customer.getTypePerson().equals(CustomerTypes.EMPRESARIAL.toString()))) {
+                customer.setRegDate(new Date());
                 Mono<Customer> response = service.updateCustomer(customer);
                 if (response != null) {
                     return ResponseEntity.ok(response);
