@@ -48,7 +48,6 @@ public class CustomerController {
     @Value("message.demo")
     private String demoString;
 
-    @CircuitBreaker(name = "customers", fallbackMethod = "alternative")
     @PostMapping
     public ResponseEntity<?> createCustomer(@RequestBody Customer customer) {
         try {
@@ -76,10 +75,6 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Collections.singletonMap("message", "Error al crear cliente."));
         }
-    }
-
-    public ResponseEntity<?> alternative(@RequestBody Customer customer) {
-        return ResponseEntity.badRequest().body(null);
     }
 
     private ResponseEntity<?> buildProfile(Customer customer) {
