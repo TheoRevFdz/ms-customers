@@ -11,10 +11,14 @@ resilience4j:
     instances:
       customers:
         base-config: default
+      profiles:
+        base-config: default
   timelimiter:
     configs:
       default:
         timeout-duration: 2s
     instances:
       customers:
-        base-config: default 
+        base-config: default
+      profiles:
+        base-config: default

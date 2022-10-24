@@ -121,8 +121,8 @@ public class CustomerController {
         }
     }
 
-    public CompletableFuture<ResponseEntity<?>> alternativeFindAllCustomers() {
-        return CompletableFuture.supplyAsync(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
+    public CompletableFuture<ResponseEntity<?>> alternativeFindAllCustomers(Exception ex) {
+        return CompletableFuture.supplyAsync(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage()));
     }
 
     @PutMapping

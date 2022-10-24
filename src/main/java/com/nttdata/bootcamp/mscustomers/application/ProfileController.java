@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nttdata.bootcamp.mscustomers.interfaces.IProfileService;
 import com.nttdata.bootcamp.mscustomers.model.Profile;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+
 @RestController
 public class ProfileController {
 
@@ -31,12 +33,18 @@ public class ProfileController {
         }
     }
 
+    @CircuitBreaker(name = "profiles", fallbackMethod = "altFindAll")
     @GetMapping("/profiles")
     public ResponseEntity<?> findAll() {
         final List<Profile> response = service.findAll();
         return ResponseEntity.ok().body(response);
     }
 
+    public ResponseEntity<?> altFindAll(Exception ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @CircuitBreaker(name = "profiles", fallbackMethod = "altFindByProfile")
     @GetMapping("/profiles/{profile}")
     public ResponseEntity<?> findByProfile(@PathVariable String profile) {
         Optional<Profile> optProfile = service.findByProfile(profile);
@@ -46,5 +54,9 @@ public class ProfileController {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(String.format("No se encontró el perfil: %s", profile));
+    }
+
+    public ResponseEntity<?> altFindByProfile(@PathVariable String profile, Exception ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 }
