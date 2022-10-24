@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,8 @@ import com.nttdata.bootcamp.mscustomers.interfaces.IProfileService;
 import com.nttdata.bootcamp.mscustomers.model.Customer;
 import com.nttdata.bootcamp.mscustomers.model.Profile;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -45,6 +48,7 @@ public class CustomerController {
     @Value("message.demo")
     private String demoString;
 
+    @CircuitBreaker(name = "customers", fallbackMethod = "alternative")
     @PostMapping
     public ResponseEntity<?> createCustomer(@RequestBody Customer customer) {
         try {
@@ -74,6 +78,10 @@ public class CustomerController {
         }
     }
 
+    public ResponseEntity<?> alternative(@RequestBody Customer customer) {
+        return ResponseEntity.badRequest().body(null);
+    }
+
     private ResponseEntity<?> buildProfile(Customer customer) {
         if (customer.getProfile() == null || customer.getProfile().isBlank()
                 || customer.getProfile().equals("general".toUpperCase())) {
@@ -99,16 +107,22 @@ public class CustomerController {
         return ResponseEntity.ok(customer);
     }
 
+    @CircuitBreaker(name = "customers")
+    @TimeLimiter(name = "customers", fallbackMethod = "alternativeFindAllCustomers")
     @GetMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public ResponseEntity<?> findAllCustomers() {
+    public CompletableFuture<ResponseEntity<?>> findAllCustomers() {
         try {
             log.info(demoString);
             final Flux<Customer> response = service.findAllCustomers();
-            return ResponseEntity.ok(response);
+            return CompletableFuture.supplyAsync(() -> ResponseEntity.ok(response));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Collections.singletonMap("message", "Error en servidor al obtener los datos de clientes."));
+            return CompletableFuture.supplyAsync(() -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.singletonMap("message", "Error en servidor al obtener los datos de clientes.")));
         }
+    }
+
+    public CompletableFuture<ResponseEntity<?>> alternativeFindAllCustomers() {
+        return CompletableFuture.supplyAsync(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
     }
 
     @PutMapping
