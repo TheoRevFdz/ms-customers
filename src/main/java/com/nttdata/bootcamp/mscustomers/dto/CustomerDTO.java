@@ -22,6 +22,6 @@ public class CustomerDTO {
     private String phone;
     private String email;
     private String typePerson;
-    private String typeProduct;
     private Date regDate;
+    private ProfileDTO profileDTO;
 }

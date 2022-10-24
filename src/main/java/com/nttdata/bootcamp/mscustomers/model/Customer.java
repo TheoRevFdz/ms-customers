@@ -25,7 +25,6 @@ public class Customer {
     private String phone;
     private String email;
     private String typePerson;
-    private String typeProduct;
     private Date regDate;
     private String profile;
 }
