@@ -60,6 +60,7 @@ public class CustomerController {
                     return respProfile;
                 }
 
+                customer.setRegDate(new Date());
                 final Mono<Customer> customerMono = Mono.just(customer);
                 final Mono<Customer> response = service.createCustomer(customerMono);
                 return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -132,6 +133,9 @@ public class CustomerController {
                     return respProfile;
                 }
 
+                if (customer.getRegDate() == null) {
+                    customer.setRegDate(new Date());
+                }
                 Mono<Customer> response = service.updateCustomer(customer);
                 if (response != null) {
                     return ResponseEntity.ok(response);
