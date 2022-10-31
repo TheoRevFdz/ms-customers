@@ -23,5 +23,6 @@ public class CustomerDTO {
     private String email;
     private String typePerson;
     private Date regDate;
+    private String profile;
     private ProfileDTO profileDTO;
 }

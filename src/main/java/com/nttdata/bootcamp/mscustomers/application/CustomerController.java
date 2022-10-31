@@ -183,6 +183,7 @@ public class CustomerController {
                         .email(c.getEmail())
                         .typePerson(c.getTypePerson())
                         .regDate(c.getRegDate())
+                        .profile(c.getProfile())
                         .profileDTO(dtoProfile)
                         .build();
                 return ResponseEntity.ok(dto);

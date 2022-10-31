@@ -1,4 +1,4 @@
-package com.nttdata.bootcamp.mscustomers.interfaces;
+package com.nttdata.bootcamp.mscustomers.interfaces.impl;
 
 import java.time.Duration;
 import java.util.Optional;
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.nttdata.bootcamp.mscustomers.infraestructure.ICustomerReactiveRepository;
 import com.nttdata.bootcamp.mscustomers.infraestructure.ICustomerRepository;
+import com.nttdata.bootcamp.mscustomers.interfaces.ICustomerService;
 import com.nttdata.bootcamp.mscustomers.model.Customer;
 
 import reactor.core.publisher.Flux;
