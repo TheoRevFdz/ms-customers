@@ -1,4 +1,4 @@
-package com.nttdata.bootcamp.mscustomers.interfaces;
+package com.nttdata.bootcamp.mscustomers.interfaces.impl;
 
 import java.util.List;
 import java.util.Optional;
@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.nttdata.bootcamp.mscustomers.infraestructure.IProfileRepository;
+import com.nttdata.bootcamp.mscustomers.interfaces.IProfileService;
 import com.nttdata.bootcamp.mscustomers.model.Profile;
 
 @Service
